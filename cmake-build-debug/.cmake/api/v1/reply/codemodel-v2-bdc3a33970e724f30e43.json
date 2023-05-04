@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.24"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "PSD_assignment_2_project",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "PSD_assignment_2_project::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-PSD_assignment_2_project-Debug-84406dc11a2d546233ca.json",
+					"name" : "PSD_assignment_2_project",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/hammad_badat/Library/CloudStorage/OneDrive-LATROBEUNIVERSITY/2023 sem 1/CSE3PSD/assignments PSD/Assessment 2 25%/PSD assignment 2 project/cmake-build-debug",
+		"source" : "/Users/hammad_badat/Library/CloudStorage/OneDrive-LATROBEUNIVERSITY/2023 sem 1/CSE3PSD/assignments PSD/Assessment 2 25%/PSD assignment 2 project"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

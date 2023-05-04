@@ -15,84 +15,19 @@ string getNextBookingReferenceNumber() {
     bookingReferenceNumbercount = to_string(number);
     return to_string(number);
 }
-//interfaces:
-//Create an interface class (abstract class) called IBookingSystem that includes pure virtual
-//functions for the following operations:
-//a. Create booking
-//b. Cancel booking
-//c. Update booking details
-//d. Display available flights
-//e. Display flight details
-//f. Display booking details
-
-
-class IBookingSystem {
-public:
-    virtual bool createBooking() = 0;
-    virtual bool cancelBooking() = 0;
-    virtual bool updateBookingDetails() = 0;
-    virtual void displayAvailableFlights() = 0;
-    virtual void displayFlightDetails() = 0;
-    virtual void displayBookingDetails() = 0;
-};
-
-//Implement this interface in a concrete class called FlightBookingSystem, which manages the flight booking operations.
-class FlightBookingSystem : public IBookingSystem {
-    public:
-
-        bool createBooking() {
-            // Create booking:
-            //to do this we need
-            //get flight details from user to create a flight object
-//           std::cout << "Enter flight number: ";
-
-            //get passenger details to create a passenger object
-
-//            Booking booking(Flight f, Passenger p );
-            return true;
-        }
-
-        bool cancelBooking() {
-            // Cancel booking
-            return true;
-        }
-
-        bool updateBookingDetails() {
-            // Update booking details
-            return true;
-        }
-
-        void displayAvailableFlights() {
-            // Display available flights
-        }
-
-        void displayFlightDetails() {
-            // Display flight details
-        }
-
-        void displayBookingDetails() {
-            // Display booking details
-            }
-
-
-
-    private:
-        vector<Flight> flights;
-        vector<Booking> bookings;
-};
 
 //Booking: A class representing a booking, including attributes such as booking reference
 //number, flight details, and passenger details.
 class Booking  {
-    private:
-        string bookingReferenceNumber;
-        Flight* flight;
-        Passenger* passenger;
+private:
+    string bookingReferenceNumber;
+    Flight* flight;
+    Passenger* passenger;
 
-    public:
+public:
 //    create booking with flight and passenger ?
-        Booking(Flight& f, Passenger& p ):
-        flight(&f), passenger(&p), bookingReferenceNumber(getNextBookingReferenceNumber()){}
+    Booking(Flight& f, Passenger& p ):
+            flight(&f), passenger(&p), bookingReferenceNumber(getNextBookingReferenceNumber()){}
 
 //        Flight getFlight() const {
 //            return flight;
@@ -102,16 +37,16 @@ class Booking  {
 //            return passenger;
 //        }
 
-        string getBookingReferenceNumber() const {
-            return bookingReferenceNumber;
-        }
+    string getBookingReferenceNumber() const {
+        return bookingReferenceNumber;
+    }
 };
 
 //passanger class with name, age, contact info, passport no
 class Passenger {
 public:
     Passenger(std::string name, int age, std::string contactInfo, std::string passportNo = "")
-        : name(name), age(age), contactInfo(contactInfo), passportNo(passportNo) {}
+            : name(name), age(age), contactInfo(contactInfo), passportNo(passportNo) {}
 
     void displayPassengerDetails() const {
         std::cout << "Name: " << name << ", Age: " << age << ", Contact Info: " << contactInfo;
@@ -137,8 +72,8 @@ class Flight {
 public:
     Flight(std::string flightNumber, std::string origin, std::string destination,
            std::string departureTime, std::string arrivalTime)
-        : flightNumber(flightNumber), origin(origin), destination(destination),
-          departureTime(departureTime), arrivalTime(arrivalTime) {}
+            : flightNumber(flightNumber), origin(origin), destination(destination),
+              departureTime(departureTime), arrivalTime(arrivalTime) {}
 
     void displayFlightDetails() const {
         std::cout << "Flight Number: " << flightNumber << ", Origin: " << origin
@@ -184,7 +119,7 @@ private:
 public:
     DomesticFlight(std::string flightNumber, std::string origin, std::string destination,
                    std::string departureTime, std::string arrivalTime, double domesticDiscount):
-                   Flight(flightNumber,origin, destination,departureTime,arrivalTime), domesticDiscount(domesticDiscount) {}
+            Flight(flightNumber,origin, destination,departureTime,arrivalTime), domesticDiscount(domesticDiscount) {}
 
     double calculateTicketPrice() {
         // Calculate ticket price:
@@ -240,12 +175,110 @@ public:
 
 };
 
+
+//interfaces:
+//Create an interface class (abstract class) called IBookingSystem that includes pure virtual
+//functions for the following operations:
+//a. Create booking
+//b. Cancel booking
+//c. Update booking details
+//d. Display available flights
+//e. Display flight details
+//f. Display booking details
+
+
+class IBookingSystem {
+public:
+    virtual bool createBooking() = 0;
+    virtual bool cancelBooking() = 0;
+    virtual bool updateBookingDetails() = 0;
+    virtual void displayAvailableFlights() = 0;
+    virtual void displayFlightDetails() = 0;
+    virtual void displayBookingDetails() = 0;
+};
+
+//Implement this interface in a concrete class called FlightBookingSystem, which manages the flight booking operations.
+class FlightBookingSystem : public IBookingSystem {
+    public:
+
+        bool createBooking() {
+            // Create booking:
+            //to do this we need
+            //get flight details from user to create a flight object
+//           std::cout << "Enter flight number: ";
+
+            //get passenger details to create a passenger object
+
+//            Booking booking(Flight f, Passenger p );
+            return true;
+        }
+
+        bool cancelBooking() {
+            // Cancel booking
+            return true;
+        }
+
+        bool updateBookingDetails() {
+            // Update booking details
+            return true;
+        }
+
+        void displayAvailableFlights() {
+            // Display available flights
+//            display flight details
+
+//            for (auto it = flights.begin(); it != flights.end(); ++it) {
+//                (*it).displayFlightDetails();
+//            }
+
+            for (auto f : flights) {
+                f->displayFlightDetails();
+           }
+
+        }
+
+        void displayFlightDetails() {}
+
+        void displayBookingDetails() {
+            // Display booking details
+        }
+
+        void addFlight(Flight* f) {
+            flights.push_back(f);
+        }
+
+
+    private:
+        vector<Flight*> flights;
+        vector<Booking> bookings;
+};
+
+
+
 //main loop class maybe ?
 
 
 int main() {
     // Create a flight booking system
     FlightBookingSystem flightbookingsystem;
+
+//    domestic flights:
+//domestic flight takes flight number, origin, destination, departure time, arrival time, domestic discount
+//international flight takes flight number, origin, destination, departure time, arrival time, international surcharge
+    DomesticFlight flight1("QF401", "SYD", "MEL", "10:00", "11:00", 0.25);
+    DomesticFlight flight2("QF402", "MEL", "SYD", "12:00", "13:00", 0.25);
+    DomesticFlight flight3("QF403", "SYD", "BNE", "14:00", "15:00", 0.25);
+
+//    international flights:
+    InternationalFlight flight4("QF404", "SYD", "LAX", "16:00", "17:00", 0.5);
+    InternationalFlight flight5("QF405", "LAX", "SYD", "18:00", "19:00", 0.5);
+
+//    add flights to flight booking system
+    flightbookingsystem.addFlight(&flight1);
+    flightbookingsystem.addFlight(&flight2);
+    flightbookingsystem.addFlight(&flight3);
+    flightbookingsystem.addFlight(&flight4);
+    flightbookingsystem.addFlight(&flight5);
 
 //test main loop
 int choice;
@@ -275,9 +308,13 @@ while(true){
             break;
         case 4:
             cout << "Display Available Flights" << endl;
+//            use flightbookingsystem to display all available flights
+            flightbookingsystem.displayAvailableFlights();
             break;
         case 5:
             cout << "Display Flight Details" << endl;
+//            flightbookingsystem.displayFlightDetails();
+//uses a flight number to display flight details
             break;
         case 6:
             cout << "Display Booking Details" << endl;

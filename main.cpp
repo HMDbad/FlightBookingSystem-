@@ -2,12 +2,16 @@
 #include <vector>
 #include <string>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++11-extensions"
 using namespace std;
-class Booking;
 class Passenger;
 class Flight;
+class Booking;
 
-string bookingReferenceNumbercount = "0000000000";
+
+
+static string bookingReferenceNumbercount = "0000000000";
 string getNextBookingReferenceNumber() {
     // Generate booking reference number
     int number = stoi(bookingReferenceNumbercount);
@@ -16,31 +20,6 @@ string getNextBookingReferenceNumber() {
     return to_string(number);
 }
 
-//Booking: A class representing a booking, including attributes such as booking reference
-//number, flight details, and passenger details.
-class Booking  {
-private:
-    string bookingReferenceNumber;
-    Flight* flight;
-    Passenger* passenger;
-
-public:
-//    create booking with flight and passenger ?
-    Booking(Flight& f, Passenger& p ):
-            flight(&f), passenger(&p), bookingReferenceNumber(getNextBookingReferenceNumber()){}
-
-//        Flight getFlight() const {
-//            return flight;
-//        }
-
-//        Passenger getPassenger() const {
-//            return passenger;
-//        }
-
-    string getBookingReferenceNumber() const {
-        return bookingReferenceNumber;
-    }
-};
 
 //passanger class with name, age, contact info, passport no
 class Passenger {
@@ -67,6 +46,9 @@ private:
     std::string passportNo;
 };
 
+
+
+
 //flight class with flight number, origin, destination, departure time, arrival time
 class Flight {
 public:
@@ -75,10 +57,11 @@ public:
             : flightNumber(flightNumber), origin(origin), destination(destination),
               departureTime(departureTime), arrivalTime(arrivalTime) {}
 
-    void displayFlightDetails() const {
-        std::cout << "Flight Number: " << flightNumber << ", Origin: " << origin
-                  << ", Destination: " << destination << ", Departure Time: " << departureTime
-                  << ", Arrival Time: " << arrivalTime << std::endl;
+    virtual void displayFlightDetails() const {
+//        had to make this virual to make it work in the international and domestic flight classes
+//        std::cout << "Flight Number: " << flightNumber << ", Origin: " << origin
+//                  << ", Destination: " << destination << ", Departure Time: " << departureTime
+//                  << ", Arrival Time: " << arrivalTime << std::endl;
     }
 
     bool addPassenger(const Passenger &p) {
@@ -98,6 +81,10 @@ public:
         return false;
     };
 
+    string getflightNumber() const {
+        return flightNumber;
+    }
+
     virtual double calculateTicketPrice() = 0;
 
 
@@ -109,6 +96,42 @@ protected:
     std::string departureTime;
     std::string arrivalTime;
     std::vector<Passenger> passengers;
+};
+
+//Booking: A class representing a booking, including attributes such as booking reference
+//number, flight details, and passenger details.
+class Booking  {
+private:
+    string bookingReferenceNumber;
+    Flight* flight;
+    Passenger* passenger;
+
+public:
+//    create booking with flight and passenger ?
+    Booking(Flight& f, Passenger& p ):
+            flight(&f), passenger(&p), bookingReferenceNumber(getNextBookingReferenceNumber()){}
+
+    string getBookingReferenceNumber() const {
+        return bookingReferenceNumber;
+    }
+
+
+    void displayBookingDetails() const {
+        std::cout << "Booking Reference Number: " << bookingReferenceNumber << std::endl;
+        flight->displayFlightDetails();
+//        passenger->displayPassengerDetails();
+
+//        to display booking details we need to display flight details and passenger details
+//        for flight in flights
+//        if flight number is equal to booking flight number
+//        display flight details
+//        end for loop
+//        for passenger in passengers
+//        print error message flight not found
+//        for passenger in passengers
+
+    }
+
 };
 
 //domestic flight class inherits from flight class
@@ -203,13 +226,73 @@ class FlightBookingSystem : public IBookingSystem {
 
         bool createBooking() {
             // Create booking:
+//            booking(Flight& f, Passenger& p);
             //to do this we need
             //get flight details from user to create a flight object
-//           std::cout << "Enter flight number: ";
+           std::cout << "Enter flight number: ";
+           std::string flightNumber;
+           Flight* flightRef; // flightRef is a pointer to a flight object based on the flight number entered by the user
+           std::cin >> flightNumber;
 
+//           if the flight number dose not exist return false
+//           all flight numbers are stored in a vector of flights
+            vector<string> flightNoVector;
+            for (auto f : flights) {
+                flightNoVector.push_back(f->getflightNumber());
+            }
+//          if the flightnNumber dose not exist in flightNoVector return false as booking cannot be created else add that flight to flightRef and continue
+            if (std::find(flightNoVector.begin(), flightNoVector.end(), flightNumber) == flightNoVector.end()) {
+                return false;
+            }
+            else
+            {
+                for (auto f : flights) {
+                    if (f->getflightNumber() == flightNumber) {
+
+                        flightRef = f;
+                        cout << "flight found " << endl;
+                    }
+                }
+            }
             //get passenger details to create a passenger object
+//
 
-//            Booking booking(Flight f, Passenger p );
+            //return a flight* object from a flight number from inside of the flights vector
+
+
+
+            for (auto f : flights) {
+                if (f->getflightNumber() == flightNumber) {
+                    flightRef = f;
+                }
+            }
+            //get passenger details to create a passenger object
+//            Passenger(std::string name, int age, std::string contactInfo, std::string passportNo = "")
+            cout << "Enter passenger name: ";
+            string name;
+            cin >> name;
+
+            cout << "enter age: ";
+            int age;
+            cin >> age;
+
+            cout << "enter contact info: ";
+            string contactinfo;
+            cin >> contactinfo;
+
+
+            cout << "Enter passenger passport number: ";
+            string passportNumber;
+            cin >> passportNumber;
+
+            Passenger* passengerRef = new Passenger(name, age, contactinfo, passportNumber);
+
+            if (flightRef == nullptr || passengerRef == nullptr) {
+                return false;
+            }
+            //create a booking object
+            Booking bookingRef(*flightRef, *passengerRef);
+            bookings.push_back(&bookingRef);
             return true;
         }
 
@@ -224,33 +307,54 @@ class FlightBookingSystem : public IBookingSystem {
         }
 
         void displayAvailableFlights() {
-            // Display available flights
-//            display flight details
-
-//            for (auto it = flights.begin(); it != flights.end(); ++it) {
-//                (*it).displayFlightDetails();
-//            }
-
+            // Display all flights from the list of flights
             for (auto f : flights) {
                 f->displayFlightDetails();
            }
 
         }
 
-        void displayFlightDetails() {}
+        void displayFlightDetails() {
+            // Display flight details based on flight number
+            string flightno;
+            cout << "Enter flight number: ";
+            cin >> flightno;
+            for (auto f : flights) {
+                if (f->getflightNumber() == flightno) {
+                    f->displayFlightDetails();
+                }
+            }
+
+        }
 
         void displayBookingDetails() {
-            // Display booking details
+            // Display booking details based on booking number
+            string bookingno;
+            cout << "Enter booking reference number: ";
+            cin >> bookingno;
+            for (auto b : bookings) {
+                if (b->getBookingReferenceNumber() == bookingno) {
+                    cout << "Booking found" << endl;
+//                    call the bookingDisplay function
+                    b->displayBookingDetails();
+                }
+            }
+            cout << "Booking not found" << endl;
+
         }
 
         void addFlight(Flight* f) {
             flights.push_back(f);
         }
 
+//        Flight* getflightNumber() {
+//
+//        }
+
 
     private:
         vector<Flight*> flights;
-        vector<Booking> bookings;
+        vector<Booking*> bookings;
 };
 
 
@@ -313,12 +417,12 @@ while(true){
             break;
         case 5:
             cout << "Display Flight Details" << endl;
-//            flightbookingsystem.displayFlightDetails();
-//uses a flight number to display flight details
+            flightbookingsystem.displayFlightDetails();
+//            uses a flight number to display flight details
             break;
         case 6:
             cout << "Display Booking Details" << endl;
-//            flightbookingsystem.displayBookingDetails();
+            flightbookingsystem.displayBookingDetails();
             break;
         case 7:
             cout << "Exit" << endl;
@@ -383,3 +487,5 @@ while(true){
     return 0;
 };
 
+
+#pragma clang diagnostic pop

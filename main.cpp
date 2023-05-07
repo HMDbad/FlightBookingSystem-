@@ -163,6 +163,18 @@ public:
         return passenger;
     }
 
+    bool updatePassenger(Passenger& p) {
+        passenger = &p;
+        cout << "Passenger updated" << endl;
+        return true;
+    }
+
+    bool updateFlight(Flight& f) {
+        flight = &f;
+        cout << "Flight updated" << endl;
+        return true;
+    }
+
 };
 
 //domestic flight class inherits from flight class
@@ -378,7 +390,7 @@ class FlightBookingSystem : public IBookingSystem {
             string bookingno;
             cout << "Enter booking number: ";
             cin >> bookingno;
-            // find booking number in bookings vector
+            // find booking number in bookings vectore
 
             for (auto b : bookings) {
                 if (b->getBookingNumber() == bookingno) {
@@ -407,8 +419,53 @@ class FlightBookingSystem : public IBookingSystem {
         }
 
         bool updateBookingDetails() {
-            // Update booking details
-            return true;
+            // Update booking details will return true if booking is updated to a new flight
+            // else return false if booking is not updated
+//            get booking number from user
+            string bookingno;
+            cout << "Enter booking reference number: ";
+            cin >> bookingno;
+            // find booking number in bookings vector
+            // to update a booking in flight booking systems we use "updateBooking(newFlight: Flight): bool" in booking class to change the flight
+            Booking *bookingRef;
+            bool validBooking = false;
+            for (auto b : bookings) {
+                if (b->getBookingNumber() == bookingno) {
+                    bookingRef = b;
+                    validBooking = true;
+                    cout << "[VALID BOOKING]" << endl;
+                    Flight* originalFlightRef = b->getFlight();
+
+                    for (auto f : flights){
+                        f->displayFlightDetails();
+                    }
+                    cout << "Enter the flight number you would like to update to: ";
+                    string flightno;
+                    cin >> flightno;
+
+                    Flight* newFlightRef;
+                    //check if flight number entered is in flihts vector
+                    for (auto f : flights) {
+                        if (f->getflightNumber() == flightno) {
+                            for (auto f : flights) {
+                                if (f->getflightNumber() == flightno) {
+                                    newFlightRef = f;
+                                }
+                            }
+                            if (newFlightRef == nullptr) {
+                                cout << "[INVALID FLIGHT]" << endl;
+                                return false;
+                            }
+                            return b->updateFlight(*newFlightRef);
+                            // this will return true if booking is updated to a new flight
+                        }
+                    }
+                }
+            }
+            if (validBooking == false) {
+                cout << "[INVALID BOOKING]" << endl;
+                return false;
+            }
         }
 
         void displayAvailableFlights() {
@@ -518,6 +575,7 @@ while(true){
             break;
         case 3:
             cout << "Update Booking Details" << endl;
+            flightbookingsystem.updateBookingDetails();
             break;
         case 4:
             cout << "Display Available Flights" << endl;

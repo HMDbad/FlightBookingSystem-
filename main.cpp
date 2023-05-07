@@ -15,11 +15,11 @@ static string bookingReferenceNumbercount = "0000000000";
 string getNextBookingReferenceNumber() {
     // Generate booking reference number
     int number = stoi(bookingReferenceNumbercount);
-    cout << number << endl;
+//    cout << number << endl;
     number++;
-    cout << number << endl;
+//    cout << number << endl;
     bookingReferenceNumbercount = to_string(number);
-    cout << bookingReferenceNumbercount << endl;
+//    cout << bookingReferenceNumbercount << endl;
     return to_string(number);
 }
 
@@ -128,7 +128,7 @@ private:
 public:
 //    create booking with flight and passenger ?
     Booking(Flight& f, Passenger& p ):
-            flight(&f), passenger(&p), bookingReferenceNumber(getNextBookingReferenceNumber()){cout << "Booking created 098765432" << endl;}
+            flight(&f), passenger(&p), bookingReferenceNumber(getNextBookingReferenceNumber()){}
 
     string getBookingReferenceNumber() const {
         return bookingReferenceNumber;
@@ -181,6 +181,7 @@ public:
 class DomesticFlight : public Flight {
 private:
     double domesticDiscount;
+    double price;
 
 public:
     DomesticFlight(std::string flightNumber, std::string origin, std::string destination,
@@ -188,20 +189,22 @@ public:
             Flight(flightNumber,origin, destination,departureTime,arrivalTime), domesticDiscount(domesticDiscount) {}
 
     double calculateTicketPrice() {
-        // Calculate ticket price:
-//        double price = 0;
-//        if (passengers.size() < 100) {
-//            price = 100;
-//        } else {
-//            price = 200;
-//        }
-        return 0;
+//       Calculate ticket price:
+
+        if (passengers.size() < 100) {
+            price = 100*domesticDiscount;
+            return price;
+        } else {
+            price = 200*domesticDiscount;
+            return price;
+        }
     }
 
-    double applyDomesticDiscount() {
-        // Apply domestic discount
-        return 0;
-    }
+//    domestic discount is applied when calculating ticket price
+//    double applyDomesticDiscount() {
+//        // Apply domestic discount
+//        return 0;
+//    }
 
     void displayFlightDetails() const {
         std::cout << "Flight Number: " << flightNumber << ", Origin: " << origin
@@ -220,6 +223,7 @@ class InternationalFlight : public Flight {
 private:
 //    std::string passportNo; // (extra information for international flights)
     double internationalSurcharge; // International surcharge for international flights
+    double price;
 public:
     InternationalFlight(std::string flightNumber, std::string origin, std::string destination,
                         std::string departureTime, std::string arrivalTime, double internationalSurcharge) :
@@ -227,14 +231,21 @@ public:
             internationalSurcharge(internationalSurcharge) {}
 
     double calculateTicketPrice() {
-        // Calculate ticket price
-        return 0;
+        // Calculate ticket price and sets price of flight
+        if (passengers.size() < 100) {
+            price = 200+(200*internationalSurcharge);
+            return price;
+        } else {
+            price = 100+(100*internationalSurcharge);
+            return price;
+        }
     }
 
+//    international surcharge id added to ticket price when calculating ticket price
 //    returns void takes a surcharge double as a parameter
-    void  appllyInternationalSurcharge() {
-        // Apply international surcharge
-    }
+//    void  appllyInternationalSurcharge() {
+//        // Apply international surcharge
+//    }
 
     void displayFlightDetails() const {
         std::cout << "Flight Number: " << flightNumber << ", Origin: " << origin
@@ -375,12 +386,12 @@ class FlightBookingSystem : public IBookingSystem {
             cout << "[BOOKING CREATED] Your booking reference number is: " << bookingRef->getBookingNumber() << endl;
 
 //            test if booking is actually in the bookings vector
-            for (auto b : bookings) {
-                if (b->getBookingNumber() == bookingRef->getBookingNumber()) {
-                    cout << "[BOOKING IS in bookings vector]" << endl;
-                    b->displayBookingDetails();
-                }
-            }
+//            for (auto b : bookings) {
+//                if (b->getBookingNumber() == bookingRef->getBookingNumber()) {
+//                    cout << "[BOOKING IS in bookings vector]" << endl;
+//                    b->displayBookingDetails();
+//                }
+//            }
             return true;
         }
 
